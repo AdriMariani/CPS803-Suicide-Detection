@@ -16,7 +16,7 @@ df = pd.read_csv('Suicide_Detection.csv')
 
 ''' Functions'''
 def a(text):
-    chars = "\`*_{}[]()>#+-!$';?<>|:~@%^ðŸ™ðŸ˜ŽÄ°â€€™"
+    chars = "\*_{}[]()#+-!$';<>|:%=¸”&‚"
     for c in chars:
         text = text.replace(c, " ")
     text = text.replace('"', " ")
@@ -28,6 +28,8 @@ def a(text):
     text = text.replace("filler", "'")
     text = text.replace("  ", " ")
     text = text.lower()
+    text = text.encode("ascii", "ignore")
+    text = text.decode()
     return text
 
 '''Processing'''
@@ -35,14 +37,11 @@ notes = df['text']
 classfication = df['class']
 notesCleaned = pd.Series( [], dtype=str)
 
-#for i in range(0, len(notes)-1):
 for i in range(0, len(notes)):
     each = (a(notes[i]))
     if i%10000 == 0:
-        #print('At ', i, 'th record.')
         print("At record = %s" %(i))
     notesCleaned[i] = each
-    #print(each)
 
 df['notesCleaned'] = notesCleaned
 
