@@ -36,7 +36,7 @@ test_tokens = test_df['tokens']
 test_max_count = test_df['max_count']
 
 '''Constants'''
-padding = max_count[0]
+padding = max(max_count[0], test_max_count[0])
 
 '''Functions'''
 def create_matrix(tokens):
@@ -56,8 +56,8 @@ train_matrix = create_matrix(tokens)
 test_matrix = create_matrix(test_tokens)
 
 '''Classification'''
-clf = LogisticRegression()
+clf = LogisticRegression(max_iter=1200000)
 predict_ = clf.fit(train_matrix, classfication_int)
 predict_ = clf.predict(test_matrix)
 score = clf.score(test_matrix, test_classfication_int)
-print("Prediction Score: ", score)
+print("Prediction Score:", round(score*100, 2), "%")
