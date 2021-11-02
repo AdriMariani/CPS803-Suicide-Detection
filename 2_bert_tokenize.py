@@ -14,7 +14,7 @@ tokenizer = AutoTokenizer.from_pretrained('bert-base-cased')
 
 '''Import Data'''
 name = 'sample_10'
-df = pd.read_csv('C:/Users/jasmi/Desktop/ML data/'+name+'.csv') 
+df = pd.read_csv(name+'.csv') 
 df.head()
 
 index = df['Unnamed: 0']
