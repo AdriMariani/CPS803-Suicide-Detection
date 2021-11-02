@@ -47,7 +47,7 @@ def split(text):
 ''' Import'''
 name = convertTuple(path)
 name = name.replace('.csv','')
-df = pd.read_csv('C:/Users/jasmi/Desktop/ML data/'+name+'.csv') 
+df = pd.read_csv(name+'.csv') 
 #print(df.shape)
     
 '''Processing'''
