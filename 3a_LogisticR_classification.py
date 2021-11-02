@@ -10,12 +10,12 @@ import numpy as np
 
 '''Import Training Data'''
 train_name = 'sample_20'
-train_df = pd.read_csv('C:/Users/jasmi/Desktop/ML data/'+train_name+'_tokens.csv') 
+train_df = pd.read_csv(train_name+'_tokens.csv') 
 #train_df.head()
 
 '''Import Test Data'''
 test_name = 'sample_10'
-test_df = pd.read_csv('C:/Users/jasmi/Desktop/ML data/'+test_name+'_tokens.csv') 
+test_df = pd.read_csv(test_name+'_tokens.csv') 
 #train_df.head()
 
 '''Training Dataframes'''
