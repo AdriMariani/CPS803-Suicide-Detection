@@ -12,13 +12,15 @@ import transformers as ppb # pytorch transformers
 from transformers import AutoTokenizer
 tokenizer = AutoTokenizer.from_pretrained('bert-base-cased')
 
+ignore_long = True  # set false if including long notes
+max_note_length = 512
+
 '''Import Data'''
 name = 'sample_10'
 df = pd.read_csv(name+'.csv') 
 df.head()
 
 index = df['Unnamed: 0']
-notes = df['text']
 classfication = df['class']
 notesCleaned = df['notesCleaned']
 df.loc[df['class'] == 'suicide', 'classification_int'] = 1
@@ -39,14 +41,15 @@ tokens = pd.Series( [], dtype=str)
 max_value = 0
 
 print("\n",(df['notesCleaned']).shape, tokenized.shape)
-i = 0
-while i < len(df['notesCleaned']):
+for i in range(len(df['notesCleaned'])):
     #tokens[i] = np.pad(tokenized[i], (0, 512-len(tokenized[i])), 'constant', constant_values=(0))
-    tokens[i] = tokenized[i]
-    if len(tokenized[i]) >= max_value:
-        max_value = len(tokenized[i])
-    print(classfication[i], tokenized.shape, len(tokenized[i]), max_value)
-    i = i + 1
+    if ignore_long and len(notesCleaned[i]) > max_note_length:
+        df.drop(i, axis=0, inplace=True)  # drop long text
+    else:
+        tokens[i] = tokenized[i]
+        if len(tokenized[i]) >= max_value:
+            max_value = len(tokenized[i])
+        # print(classfication[i], tokenized.shape, len(tokenized[i]), max_value)
 
 '''Export'''
 df['max_count'] = max_value
