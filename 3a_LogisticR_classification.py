@@ -7,6 +7,7 @@ Created on Mon Nov  1 15:07:03 2021
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 import numpy as np
+import utils
 
 '''Import Training Data'''
 train_name = 'sample_20'
@@ -39,21 +40,8 @@ test_max_count = test_df['max_count']
 padding = max(max_count[0], test_max_count[0])
 
 '''Functions'''
-def create_matrix(tokens):
-    n = len(tokens)
-    matrix = np.zeros(shape=(n,padding),dtype='object')
-    for i in range(0, n):
-        value = (tokens[i])
-        value = value.replace("[", "")
-        value = value.replace("]", "") 
-        value = value.split(", ")
-        #print(len(value), value)
-        for j in range(0, len(value)):
-            matrix[i][j] = int(value[j])
-    return matrix
-
-train_matrix = create_matrix(tokens)
-test_matrix = create_matrix(test_tokens)
+train_matrix = utils.create_matrix(tokens, padding)
+test_matrix = utils.create_matrix(test_tokens, padding)
 
 '''Classification'''
 clf = LogisticRegression(max_iter=1200000)
