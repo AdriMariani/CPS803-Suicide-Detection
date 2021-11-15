@@ -52,6 +52,7 @@ df = pd.read_csv(name+'.csv')
     
 '''Processing'''
 notes = df['text']
+df = df.drop('text', 1)
 if name == 'Suicide_Detection':
     classfication = df['class']  
 elif name == 'suicide_notes':
