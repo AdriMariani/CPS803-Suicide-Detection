@@ -27,6 +27,12 @@ padding = max(max_train_count, max_test_count)
 train_matrix = utils.create_matrix(train_tokens, padding)
 test_matrix = utils.create_matrix(test_tokens, padding)
 
+# Scale the data
+
+sc_X = StandardScaler()
+X_trainscaled=sc_X.fit_transform(X_train)
+X_testscaled=sc_X.transform(X_test)
+
 mlp_clf = MLPClassifier(hidden_layer_sizes=(5,2), max_iter = 300,activation = 'relu', solver = 'adam')
                         
 mlp_clf.fit(train_matrix, train_labels)
