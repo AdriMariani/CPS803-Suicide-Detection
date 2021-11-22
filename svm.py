@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import utils
+import evaluation
 from sklearn import metrics
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import StandardScaler
@@ -16,6 +17,7 @@ max_train_count = train_df['max_count'][0]
 train_tokens = train_df['tokens']
 
 test_labels = test_df['classification_int']
+test_text = test_df['notesCleaned']
 max_test_count = test_df['max_count'][0]
 test_tokens = test_df['tokens']
 
@@ -33,4 +35,12 @@ clf = LinearSVC(random_state=0, tol=1e-5, max_iter=100000, dual=False) # set dua
 # predictions = clf.predict(scaled_test)
 clf.fit(train_matrix, train_labels)
 predictions = clf.predict(test_matrix)
-print("Accuracy: ", metrics.accuracy_score(test_labels, predictions))
+confusion_matrix = evaluation.confusion_matrix(test_labels, predictions)
+
+print("Accuracy:", metrics.accuracy_score(test_labels, predictions))
+print("Confusion Matrix:", confusion_matrix)
+print("Precision:", evaluation.calc_precision(confusion_matrix))
+print("Sensitivity/Positive Recall:", evaluation.calc_sensitivity(confusion_matrix))
+print("Specificity/Negative Recall:", evaluation.calc_specificity(confusion_matrix))
+print("F1 Score:", evaluation.calc_f1_score(confusion_matrix))
+print("Top 10 indicative words of suicide:", evaluation.get_indicative_words(test_text, predictions))
