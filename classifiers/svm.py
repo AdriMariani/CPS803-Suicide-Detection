@@ -1,14 +1,15 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
+import numpy as np
+import sys
+sys.path.append('..')
+import utils.utils as utils
+import utils.evaluation as evaluation
+from sklearn import metrics
+from sklearn.svm import LinearSVC
 from sklearn.preprocessing import StandardScaler
-from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import plot_confusion_matrix
-from sklearn.metrics import classification_report
 
-train_file = 'sample_3000_tokens.csv'
-test_file = 'sample_test_750_tokens.csv'
+train_file = '../sample_3000_tokens.csv'
+test_file = '../sample_test_750_tokens.csv'
 
 train_df = pd.read_csv(train_file) 
 test_df = pd.read_csv(test_file) 
@@ -27,10 +28,15 @@ padding = max(max_train_count, max_test_count)
 train_matrix = utils.create_matrix(train_tokens, padding)
 test_matrix = utils.create_matrix(test_tokens, padding)
 
-mlp_clf = MLPClassifier(hidden_layer_sizes=(5,2), max_iter = 300,activation = 'relu', solver = 'adam')
-                        
-mlp_clf.fit(train_matrix, train_labels)
-predictions = mlp_clf.predict(test_matrix)
+# scaler = StandardScaler()
+# scaled_train = scaler.fit_transform(train_matrix, train_labels)
+# scaled_test = scaler.fit_transform(test_matrix, test_labels)
+
+clf = LinearSVC(random_state=0, tol=1e-5, max_iter=100000, dual=False) # set dual to True if num_features > n_samples
+# clf.fit(scaled_train, train_labels)
+# predictions = clf.predict(scaled_test)
+clf.fit(train_matrix, train_labels)
+predictions = clf.predict(test_matrix)
 confusion_matrix = evaluation.confusion_matrix(test_labels, predictions)
 
 print("Accuracy:", metrics.accuracy_score(test_labels, predictions))
