@@ -29,7 +29,7 @@ def a(text):
     text = text.replace("filler", "'")
     text = text.replace("  ", " ")
     text = text.lower()
-    text = text.encode("ascii", "ignore")
+    text = text.encode("utf-8", "ignore")
     text = text.decode()
     return text
 
@@ -39,8 +39,7 @@ def split(text):
 
 ''' Import'''
 name = convertTuple(path)
-name = name.replace('.csv','')
-df = pd.read_csv('datasets/'+name+'.csv') 
+df = pd.read_csv('../datasets/'+name)
 #print(df.shape)
     
 '''Processing'''
