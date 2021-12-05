@@ -7,42 +7,38 @@ import utils.evaluation as evaluation
 from sklearn import metrics
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import StandardScaler
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
 
-train_file = '../sample_3000_tokens.csv'
-test_file = '../sample_test_750_tokens.csv'
+path = '../datasets/c_Suicide_Detection.csv'
+df = pd.read_csv(path, header=0)
 
-train_df = pd.read_csv(train_file) 
-test_df = pd.read_csv(test_file) 
+sentences = df['notesCleaned'].values
 
-train_labels = train_df['classification_int']
-max_train_count = train_df['max_count'][0]
-train_tokens = train_df['tokens']
+ex = sentences.shape[0]
+y = np.zeros((ex))
+y[df['class'] == 'suicide'] = 1
 
-test_labels = test_df['classification_int']
-test_text = test_df['notesCleaned']
-max_test_count = test_df['max_count'][0]
-test_tokens = test_df['tokens']
+sentences = sentences[:30000]
+y = y[:30000]
 
-padding = max(max_train_count, max_test_count)
+sentences_train, sentences_test, y_train, y_test = train_test_split(
+    sentences, y, test_size=0.25, random_state=1000)
 
-train_matrix = utils.create_matrix(train_tokens, padding)
-test_matrix = utils.create_matrix(test_tokens, padding)
-
-# scaler = StandardScaler()
-# scaled_train = scaler.fit_transform(train_matrix, train_labels)
-# scaled_test = scaler.fit_transform(test_matrix, test_labels)
+vectorizer = CountVectorizer()
+vectorizer.fit(sentences_train)
+train_matrix = vectorizer.transform(sentences_train)
+test_matrix  = vectorizer.transform(sentences_test)
 
 clf = LinearSVC(random_state=0, tol=1e-5, max_iter=100000, dual=False) # set dual to True if num_features > n_samples
-# clf.fit(scaled_train, train_labels)
-# predictions = clf.predict(scaled_test)
-clf.fit(train_matrix, train_labels)
+clf.fit(train_matrix, y_train)
 predictions = clf.predict(test_matrix)
-confusion_matrix = evaluation.confusion_matrix(test_labels, predictions)
+confusion_matrix = evaluation.confusion_matrix(y_test, predictions)
 
-print("Accuracy:", metrics.accuracy_score(test_labels, predictions))
+print("Accuracy:", metrics.accuracy_score(y_test, predictions))
 print("Confusion Matrix:", confusion_matrix)
 print("Precision:", evaluation.calc_precision(confusion_matrix))
 print("Sensitivity/Positive Recall:", evaluation.calc_sensitivity(confusion_matrix))
 print("Specificity/Negative Recall:", evaluation.calc_specificity(confusion_matrix))
 print("F1 Score:", evaluation.calc_f1_score(confusion_matrix))
-print("Top 10 indicative words of suicide:", evaluation.get_indicative_words(test_text, predictions))
+# print("Top 10 indicative words of suicide:", evaluation.get_indicative_words(sentences_test, predictions))
