@@ -4,44 +4,40 @@ import numpy as np
 import sys
 sys.path.append('..')
 import utils.utils as utils
+import utils.evaluation as evaluation
+from sklearn import metrics
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
 
-'''Import Training Data'''
-train_name = 'sample_20'
-train_df = pd.read_csv(train_name+'_tokens.csv') 
-#train_df.head()
+path = '../datasets/c_Suicide_Detection.csv'
+df = pd.read_csv(path, header=0)
 
-'''Import Test Data'''
-test_name = 'sample_10'
-test_df = pd.read_csv(test_name+'_tokens.csv') 
-#train_df.head()
+sentences = df['notesCleaned'].values
 
-'''Training Dataframes'''
-index = train_df['Unnamed: 0']
-notes = train_df['text']
-classfication = train_df['class']
-notesCleaned = train_df['notesCleaned']
-classfication_int = train_df['classification_int']
-tokens = train_df['tokens']
-max_count = train_df['max_count']
+ex = sentences.shape[0]
+y = np.zeros((ex))
+y[df['class'] == 'suicide'] = 1
 
-test_index = test_df['Unnamed: 0']
-test_notes = test_df['text']
-test_classfication = test_df['class']
-test_notesCleaned = test_df['notesCleaned']
-test_classfication_int = test_df['classification_int']
-test_tokens = test_df['tokens']
-test_max_count = test_df['max_count']
+sentences = sentences[:50000]
+y = y[:50000]
 
-'''Constants'''
-padding = max(max_count[0], test_max_count[0])
+sentences_train, sentences_test, y_train, y_test = train_test_split(
+    sentences, y, test_size=0.25, random_state=1000)
 
-'''Functions'''
-train_matrix = utils.create_matrix(tokens, padding)
-test_matrix = utils.create_matrix(test_tokens, padding)
+vectorizer = CountVectorizer()
+vectorizer.fit(sentences_train)
+train_matrix = vectorizer.transform(sentences_train)
+test_matrix  = vectorizer.transform(sentences_test)
 
 '''Classification'''
 clf = LogisticRegression(max_iter=1200000)
-predict_ = clf.fit(train_matrix, classfication_int)
-predict_ = clf.predict(test_matrix)
-score = clf.score(test_matrix, test_classfication_int)
-print("Prediction Score:", round(score*100, 2), "%")
+clf.fit(train_matrix, y_train)
+predictions = clf.predict(test_matrix)
+confusion_matrix = evaluation.confusion_matrix(y_test, predictions)
+
+print("Accuracy:", metrics.accuracy_score(y_test, predictions))
+print("Confusion Matrix:", confusion_matrix)
+print("Precision:", evaluation.calc_precision(confusion_matrix))
+print("Sensitivity/Positive Recall:", evaluation.calc_sensitivity(confusion_matrix))
+print("Specificity/Negative Recall:", evaluation.calc_specificity(confusion_matrix))
+print("F1 Score:", evaluation.calc_f1_score(confusion_matrix))
