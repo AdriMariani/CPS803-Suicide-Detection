@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
-import utils 
+import sys
+sys.path.append('..')
+import utils.utils as utils
 from transformers import BertTokenizer
 bert = BertTokenizer.from_pretrained("bert-base-cased")
 from tokenizers import BertWordPieceTokenizer
