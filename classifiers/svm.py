@@ -9,6 +9,7 @@ from sklearn.svm import LinearSVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
+from joblib import dump, load
 
 path = '../datasets/c_Suicide_Detection.csv'
 df = pd.read_csv(path, header=0)
@@ -19,8 +20,8 @@ ex = sentences.shape[0]
 y = np.zeros((ex))
 y[df['class'] == 'suicide'] = 1
 
-sentences = sentences[:30000]
-y = y[:30000]
+sentences = sentences[:50000]
+y = y[:50000]
 
 sentences_train, sentences_test, y_train, y_test = train_test_split(
     sentences, y, test_size=0.25, random_state=1000)
@@ -30,8 +31,15 @@ vectorizer.fit(sentences_train)
 train_matrix = vectorizer.transform(sentences_train)
 test_matrix  = vectorizer.transform(sentences_test)
 
-clf = LinearSVC(random_state=0, tol=1e-5, max_iter=100000, dual=False) # set dual to True if num_features > n_samples
-clf.fit(train_matrix, y_train)
+load_model = True  # if model is saved to file set True
+
+if not load_model:
+    clf = LinearSVC(random_state=0, tol=1e-5, max_iter=100000, dual=False, C=0.1) # set dual to True if num_features > n_samples
+    clf.fit(train_matrix, y_train)
+    dump(clf, 'svm.joblib')
+else:
+    clf = load('svm.joblib')
+
 predictions = clf.predict(test_matrix)
 confusion_matrix = evaluation.confusion_matrix(y_test, predictions)
 
