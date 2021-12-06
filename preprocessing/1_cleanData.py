@@ -7,7 +7,7 @@ train_path2='suicide_notes.csv',
 test_path='reddit_depression_suicidewatch.csv'
 
 '''Input'''
-path = train_path     ## Change this filename
+path = train_path2     ## Change this filename
 
 ''' Functions'''
 def convertTuple(tup):
@@ -18,6 +18,7 @@ def convertTuple(tup):
     return str
 
 def a(text):
+    text = str(text)
     chars = "\/*_{}[]()#+-!$';<>|:%=¸”&‚"
     text = text.replace('"', " ")
     text = text.replace(".", " ")
@@ -45,12 +46,12 @@ df = pd.read_csv('../datasets/'+name)
 '''Processing'''
 notes = df['text']
 df = df.drop('text', 1)
-if name == 'Suicide_Detection':
+if name == 'Suicide_Detection.csv':
     classfication = df['class']  
-elif name == 'suicide_notes':
+elif name == 'suicide_notes.csv':
     df['class'] = 'suicide'
     classfication = 'suicide' 
-elif name == 'reddit_depression_suicidewatch':
+elif name == 'reddit_depression_suicidewatch.csv':
     df.loc[df['label'] == 'SuicideWatch', 'class'] = 'suicide'
     df.loc[df['label'] == 'depression', 'class'] = 'non-suicide'
     classfication = df['class']  
@@ -66,4 +67,4 @@ for i in range(0, len(notes)):
 df['notesCleaned'] = notesCleaned
 
 '''Export'''
-df.to_csv('c_'+name+'.csv', index=False)
+df.to_csv('c_'+name, index=False)
