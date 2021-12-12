@@ -1,7 +1,7 @@
 # Suicide Detection (CPS803)
 ### Abstract 
 Project uses ML techniques in detecting a probable suicide message based on social media posts. 
-For this purpose, we will train and test classifiers such as Naïve Bayes, Support Vector Model, Logistic Regression and MLP to distinguish Reddit posts that indicate suicide and non-suicide. 
+For this purpose, we trained and tested classical machine learning classifiers such as Naïve Bayes, Support Vector Model, and Logistic Regression distinguish Reddit posts that indicate suicide and non-suicide.
 The word associations derived from each method is used to identify posts with suicidal tendencies.
 
 ### Datasets <br>
@@ -37,79 +37,140 @@ The word associations derived from each method is used to identify posts with su
   </table>
   
 ### Procedure
-![Untitled Diagram drawio](https://user-images.githubusercontent.com/55416635/142925329-23ffc099-be9a-44a6-9583-97bd35442513.png)
-### Preliminary Results
-#### sample_10 <br>
-Logistic Regression Prediction Score: 50.0 % <br>
-Support Vector Machine Prediction Score: 50.0 % <br>
-Bernoulli Naive Bayes Prediction Score: 50.0 % <br>
-Gaussian Naive Bayes Prediction Score: 50.0 % <br>
+![flow_diagram](images/diagram_procedure.PNG)</td>
+### Results - Classical Machine Learning Models
 
-#### sample_20 <br>
-Logistic Regression Prediction Score: 63.16 % <br>
-Support Vector Machine Prediction Score: 63.16 % <br>
-Bernoulli Naive Bayes Prediction Score: 63.16 % <br>
-Gaussian Naive Bayes Prediction Score: 47.37 % <br>
-
-#### sample_100 <br>
-Logistic Regression Prediction Score: 65.22 % <br>
-Support Vector Machine Prediction Score: 65.22 % <br>
-Bernoulli Naive Bayes Prediction Score: 63.04 % <br>
-Gaussian Naive Bayes Prediction Score: 52.17 % <br>
-Random Forest Prediction Score: 68.48 % <br>
-Multilayer Perceptron Prediction Score: 68.48 % <br> ***
-
-#### suicide_notes <br>
-Logistic Regression Prediction Score: 59.50 % <br>
-Support Vector Machine Prediction Score: 59.04 % <br>
-Bernoulli Naive Bayes Prediction Score: 52.86 % <br>
-Gaussian Naive Bayes Prediction Score: 22.88 % <br>
-Random Forest Prediction Score: 63.39 % <br>
-Multilayer Perceptron Prediction Score: 71.85 % <br> ***
-
-#### reddit_depression_suicidewatch <br>
-Logistic Regression Prediction Score: 44.98 % <br>
-Support Vector Machine Prediction Score: 44.86 % <br>
-Bernoulli Naive Bayes Prediction Score: 45.02 % <br>
-Gaussian Naive Bayes Prediction Score: 46.79 % <br>
-Random Forest Prediction Score: 44.69 % <br>
-Multilayer Perceptron Prediction Score: 45.45 % <br> ***
-
-### Key Concepts <br>
- <table>
+#### Suicide Detection Train-Test Split <br>
+<i>Dataset is balanced and accurately labelled. </i>
+<table>
     <thead>
       <tr>
-        <th>Datasets</th>
-        <th>True Positives</th>
-        <th>False Positives</th>
-        <th>False Negatives</th>
+        <th>Model</th>
+        <th>BERT Accuracy</th>
+        <th>Count Vectorize Accuracy</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-            <td><i>Sample 100</i></td>
-            <td>probably a coward, way of life, bad things, better go, don’t want to feel sorry anymore, want to take their life, felling hurt, lost things, can’t find meaning in their life</td>
-            <td>really like to go on a date, struggling to ask someone out, asking a friend out, way of life, things were simpler back in school, mentions words like "girlfriend" & "past"</td>
-            <td>anyone want to talk, loneliness, depression, thoughts of suicide, therapists</td>
+            <td><i>Logistic Regression</i></td>
+            <td>81.08</td>
+            <td>93.19</td>
         </tr>
         <tr>
-            <td><i>Suicide Notes</i></td>
-            <td>mentions caring for family and friends (people around them), thoughts to kill oneself</td>
-            <td></td>
-            <td>hurt, afraid and wondering about pain and death, sorry, want to cry, wondering if someone hears them, sad hours</td>
+            <td><i>Bernoulli Naive Bayes</i></td>
+            <td>82.33</td>
+            <td>77.75</td>
         </tr>
             <tr>
-            <td><i>r/depression r/SuicideWatch</i></td>
-            <td>believe they will never be happy, would like to see their family happy, better if they are dead, wishing life ended, feel useless, wishing things could change or were different</td>
-            <td>depressed, hating life, recent, way of life, references to the past</td>
-            <td>anxiety, panicking, use of medications, call for help</td>
+            <td><i>Multinomial Naive Bayes</i></td>
+            <td>82.33</td>
+            <td>90.25</td>
+        </tr>
+        </tr>
+            <tr>
+            <td><i>SVM</i></td>
+            <td>82.33</td>
+            <td>92.55</td>
+        </tr>
+        </tr>
+            <tr>
+            <td><i>MLP</i></td>
+            <td>82.07</td>
+            <td>94.52</td>
         </tr>
     </tbody>
   </table>
 
+
+#### suicide_notes <br>
+<i>Dataset is unbalanced and skewed to contain only sentences labelled as 'suicide'. </i>
+<table>
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>BERT Accuracy</th>
+        <th>Count Vectorize Accuracy</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><i>Logistic Regression</i></td>
+            <td>59.50</td>
+            <td>83.41</td>
+        </tr>
+        <tr>
+            <td><i>Bernoulli Naive Bayes</i></td>
+            <td>52.86</td>
+            <td>59.05</td>
+        </tr>
+            <tr>
+            <td><i>Multinomial Naive Bayes</i></td>
+            <td>36.16</td>
+            <td>94.83</td>
+        </tr>
+        </tr>
+            <tr>
+            <td><i>SVM</i></td>
+            <td>59.04</td>
+            <td>78.66</td>
+        </tr>
+        </tr>
+            <tr>
+            <td><i>MLP</i></td>
+            <td>60.41</td>
+            <td>97.84</td>
+        </tr>
+    </tbody>
+  </table>
+
+#### reddit_depression_suicidewatch <br>
+<i>Dataset is balanced, but labels need not be accurate. </i>
+<table>
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>BERT Accuracy</th>
+        <th>Count Vectorize Accuracy</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><i>Logistic Regression</i></td>
+            <td>44.98</td>
+            <td>54.61</td>
+        </tr>
+        <tr>
+            <td><i>Bernoulli Naive Bayes</i></td>
+            <td>45.02</td>
+            <td>45.30</td>
+        </tr>
+            <tr>
+            <td><i>Multinomial Naive Bayes</i></td>
+            <td>45.45</td>
+            <td>49.43</td>
+        </tr>
+        </tr>
+            <tr>
+            <td><i>SVM</i></td>
+            <td>44.86</td>
+            <td>54.58</td>
+        </tr>
+        </tr>
+            <tr>
+            <td><i>MLP</i></td>
+            <td>45.89</td>
+            <td>53.73</td>
+        </tr>
+    </tbody>
+  </table>
+
+### Result
+Count Vectorize perfromed better than BERT as a tokenizer.
+Multinomial Naive Bayes classifier performed the best.
+
 ### Themes <br>
 | Datasets                     | True Positives        | False Positives | False Negatives         |
 | -----------------------------|:---------------------:| ---------------:| -----------------------:|
-| *Sample 100*                 | regret                | social anxiety  | loneliness & depression |
+| *Testset*                    | regret                | social anxiety  | loneliness & depression |
 | *Suicide Notes*              | goodbye notes         |                 | loneliness & anxiety    |
 | *r/depression r/SuicideWatch*| regret & goodbye notes| social anxiety  | loneliness & anxiety    |
