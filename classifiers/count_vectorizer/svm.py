@@ -1,9 +1,5 @@
 import pandas as pd
 import numpy as np
-import sys
-sys.path.append('..')
-import utils.utils as utils
-import utils.evaluation as evaluation
 from sklearn import metrics
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import StandardScaler
@@ -11,8 +7,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from joblib import dump, load
 
-path = '../datasets/c_Suicide_Detection.csv'
-test_set2_path = '../datasets/c_reddit_depression_suicidewatch.csv'
+path = '../../datasets/c_Suicide_Detection.csv'
+test_set2_path = '../../datasets/c_reddit_depression_suicidewatch.csv'
 df = pd.read_csv(path, header=0)
 df2 = pd.read_csv(test_set2_path, header=0)
 
@@ -47,22 +43,18 @@ else:
     clf = load('svm.joblib')
 
 predictions = clf.predict(test_matrix)
-confusion_matrix = evaluation.confusion_matrix(y_test, predictions)
 
 print("Accuracy:", metrics.accuracy_score(y_test, predictions))
-print("Confusion Matrix:", confusion_matrix)
-print("Precision:", evaluation.calc_precision(confusion_matrix))
-print("Sensitivity/Positive Recall:", evaluation.calc_sensitivity(confusion_matrix))
-print("Specificity/Negative Recall:", evaluation.calc_specificity(confusion_matrix))
-print("F1 Score:", evaluation.calc_f1_score(confusion_matrix))
+print("Confusion_matrix: \n{}".format(metrics.confusion_matrix(y_test, predictions)))
+print("Precision: {:.4f}".format(metrics.precision_score(y_test, predictions)))
+print("Recall: {:.4f}".format(metrics.recall_score(y_test, predictions)))
+print("F1 Score: {:.4f}".format(metrics.f1_score(y_test, predictions)))
 # print("Top 10 indicative words of suicide:", evaluation.get_indicative_words(sentences_test, predictions))
 
 suicide_watch_predictions = clf.predict(suicide_watch_matrix)
-confusion_matrix_2 = evaluation.confusion_matrix(suicide_watch_labels, suicide_watch_predictions)
 
 print("Suicide Watch Set Accuracy:", metrics.accuracy_score(suicide_watch_labels, suicide_watch_predictions))
-print("Confusion Matrix:", confusion_matrix_2)
-print("Precision:", evaluation.calc_precision(confusion_matrix_2))
-print("Sensitivity/Positive Recall:", evaluation.calc_sensitivity(confusion_matrix_2))
-print("Specificity/Negative Recall:", evaluation.calc_specificity(confusion_matrix_2))
-print("F1 Score:", evaluation.calc_f1_score(confusion_matrix_2))
+print("Confusion_matrix: \n{}".format(metrics.confusion_matrix(suicide_watch_labels, suicide_watch_predictions)))
+print("Precision: {:.4f}".format(metrics.precision_score(suicide_watch_labels, suicide_watch_predictions)))
+print("Recall: {:.4f}".format(metrics.recall_score(suicide_watch_labels, suicide_watch_predictions)))
+print("F1 Score: {:.4f}".format(metrics.f1_score(suicide_watch_labels, suicide_watch_predictions)))

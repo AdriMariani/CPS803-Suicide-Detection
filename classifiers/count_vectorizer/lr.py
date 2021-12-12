@@ -31,10 +31,8 @@ X_test  = vectorizer.transform(sentences_test)
 
 classifier = LogisticRegression(solver='sag')
 classifier.fit(X_train, y_train)
-score = classifier.score(X_test, y_test)
-print('Accuracy for data: {:.4f}'.format(score))
-
 predictions = classifier.predict(X_test)
+
 print('Accuracy for LR model: {:.4f}'.format(accuracy_score(y_test, predictions)))
 print("Confusion_matrix: \n{}".format(confusion_matrix(y_test, predictions)))
 print("Precision: {:.4f}".format(precision_score(y_test, predictions)))
