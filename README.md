@@ -174,3 +174,7 @@ Multinomial Naive Bayes classifier performed the best.
 | *Testset*                    | regret                | social anxiety  | loneliness & depression |
 | *Suicide Notes*              | goodbye notes         |                 | loneliness & anxiety    |
 | *r/depression r/SuicideWatch*| regret & goodbye notes| social anxiety  | loneliness & anxiety    |
+
+## Project Video
+
+[![CPS803 Project]](https://www.youtube.com/watch?v=TiqcQnYaNIc)
